@@ -1,8 +1,15 @@
 <?php
 
 /**
- * Plugin Name: Token Studio → Elementor Sync (Colors + Typography, Corrected)
- * Description: Syncs Reference JSON colors and System JSON typography into Elementor Global Kit.
+ * Plugin Name: Token Studio → Elementor Sync
+ * Plugin URI:  https://localhost96.net
+ * Description: Sync design tokens with Elementor global styles. Imports reference colors and system typography. Resolves references to literal values. Updates the active Elementor Kit.
+ * Version:     0.1.0
+ * Author:      Konrad Krawczyk
+ * Author URI:  https://localhost96.net
+ * License:     GPL2
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: tokenstudio-elementor
  */
 
 // Add submenu under Elementor
