@@ -8,17 +8,11 @@ Stable tag: 0.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Sync design tokens with Elementor global styles. Imports reference colors and system typography. Resolves references to literal values. Updates the active Elementor Kit.
+Sync design tokens with Elementor global styles. Imports reference colors and typography. Resolves references. Updates the active Elementor Kit.
 
 == Description ==
 
 This plugin creates a simple interface for syncing design tokens into Elementor.
-
-* Imports **reference colors** as global colors.
-* Imports **system typography** as custom typography presets.
-* Resolves `{reference.*}` and `{system.*}` into literal values.
-* Updates the active Elementor Kit automatically.
-* Provides an admin page for pasting JSON from Token Studio.
 
 == Installation ==
 
@@ -27,6 +21,15 @@ This plugin creates a simple interface for syncing design tokens into Elementor.
 3. Go to **Elementor → Token Studio Sync** in the dashboard menu.
 4. Paste your reference and system token JSON.
 5. Click **Save & Sync**.
+
+== How it works ==
+
+The plugin: 
+* Imports **reference colors** as global colors.
+* Imports **system typography** as custom typography presets.
+* Resolves `{reference.*}` and `{system.*}` into literal values.
+* Updates the active Elementor Kit automatically.
+* Provides an admin page for pasting JSON from Token Studio.
 
 == Frequently Asked Questions ==
 
