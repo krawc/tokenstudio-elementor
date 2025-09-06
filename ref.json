@@ -1,0 +1,166 @@
+{
+    "reference": {
+        "white": {
+            "$type": "color",
+            "$value": "#ffffff"
+        },
+        "blue500": {
+            "$type": "color",
+            "$value": "hsl(209, 100%, 55%)"
+        },
+        "blue700": {
+            "$type": "color",
+            "$value": "hsl(209, 99%, 27%)"
+        },
+        "font100": {
+            "$type": "fontSize",
+            "$value": "12px"
+        },
+        "font200": {
+            "$type": "fontSize",
+            "$value": "17px"
+        },
+        "font300": {
+            "$type": "fontSize",
+            "$value": "20px"
+        },
+        "font400": {
+            "$type": "fontSize",
+            "$value": "28px"
+        },
+        "font500": {
+            "$type": "fontSize",
+            "$value": "32px"
+        },
+        "font600": {
+            "$type": "fontSize",
+            "$value": "36px"
+        },
+        "font700": {
+            "$type": "fontSize",
+            "$value": "45px"
+        },
+        "font800": {
+            "$type": "fontSize",
+            "$value": "60px"
+        },
+        "icon400": {
+            "$type": "sizing",
+            "$value": "16px"
+        },
+        "grayText": {
+            "$type": "color",
+            "$value": "hsl(210, 21%, 33%)"
+        },
+        "space100": {
+            "$type": "spacing",
+            "$value": "4px"
+        },
+        "space200": {
+            "$type": "spacing",
+            "$value": "8px"
+        },
+        "space300": {
+            "$type": "spacing",
+            "$value": "10px"
+        },
+        "space400": {
+            "$type": "spacing",
+            "$value": "16px"
+        },
+        "space500": {
+            "$type": "spacing",
+            "$value": "20px"
+        },
+        "space600": {
+            "$type": "spacing",
+            "$value": "24px"
+        },
+        "radius100": {
+            "$type": "borderRadius",
+            "$value": "6px"
+        },
+        "radius900": {
+            "$type": "borderRadius",
+            "$value": "500px"
+        },
+        "swGrey100": {
+            "$type": "color",
+            "$value": "hsl(227, 23%, 92%)"
+        },
+        "swGrey300": {
+            "$type": "color",
+            "$value": "rgba(116, 116, 116, 0.8)"
+        },
+        "swGrey800": {
+            "$type": "color",
+            "$value": "hsl(230, 75%, 13%)"
+        },
+        "fontFamily": {
+            "body": {
+                "$type": "fontFamilies",
+                "$value": "Onest"
+            },
+            "headline": {
+                "$type": "fontFamilies",
+                "$value": "Gabarito"
+            }
+        },
+        "fontWeight": {
+            "Regular": {
+                "$type": "fontWeights",
+                "$value": "400"
+            },
+            "SemiBold": {
+                "$type": "fontWeights",
+                "$value": "600"
+            }
+        },
+        "magenta500": {
+            "$type": "color",
+            "$value": "hsl(334, 63%, 49%)"
+        },
+        "magenta600": {
+            "$type": "color",
+            "$value": "hsl(334, 64%, 43%)"
+        },
+        "magenta700": {
+            "$type": "color",
+            "$value": "hsl(334, 64%, 38%)"
+        },
+        "fontLine100": {
+            "$type": "lineHeight",
+            "$value": "100%"
+        },
+        "fontLine110": {
+            "$type": "lineHeight",
+            "$value": "110%"
+        },
+        "fontLine120": {
+            "$type": "lineHeight",
+            "$value": "120%"
+        },
+        "fontLine140": {
+            "$type": "lineHeight",
+            "$value": "140%"
+        },
+        "fontLine150": {
+            "$type": "lineHeight",
+            "$value": "150%"
+        },
+        "fontLine300": {
+            "$type": "lineHeight",
+            "$value": "24px"
+        },
+        "letterSpacing": {
+            "none": {
+                "$type": "letterSpacing",
+                "$value": "0%"
+            },
+            "wide": {
+                "$type": "letterSpacing",
+                "$value": "2%"
+            }
+        }
+    }
+}

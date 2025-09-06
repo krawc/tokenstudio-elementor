@@ -1,0 +1,112 @@
+{
+    "system": {
+        "link": {
+            "color": {
+                "$value": "{reference.blue500}",
+                "$type": "color"
+            }
+        },
+        "text": {
+            "color": {
+                "$value": "{reference.grayText}",
+                "$type": "color"
+            }
+        },
+        "surface": {
+            "primary": {
+                "hover": {
+                    "$value": "{reference.magenta600}",
+                    "$type": "color"
+                },
+                "active": {
+                    "$value": "{reference.magenta700}",
+                    "$type": "color"
+                },
+                "default": {
+                    "$value": "{reference.magenta500}",
+                    "$type": "color"
+                }
+            },
+            "secondary": {
+                "text": {
+                    "$value": "{reference.blue500}",
+                    "$type": "color"
+                },
+                "hover": {
+                    "$value": "{reference.blue700}",
+                    "$type": "color"
+                }
+            }
+        },
+        "linkHover": {
+            "$value": "{reference.blue700}",
+            "$type": "color"
+        },
+        "borderInput": {
+            "$value": "{reference.swGrey100}",
+            "$type": "color"
+        },
+        "placeholder": {
+            "$value": "{reference.swGrey300}",
+            "$type": "color"
+        },
+        "textHeadline": {
+            "$value": "{reference.swGrey800}",
+            "$type": "color"
+        },
+        "typography": {
+            "body": {
+                "color": {
+                    "$value": "{system.text.color}",
+                    "$type": "color"
+                },
+                "fontSize": {
+                    "$value": "{reference.font200}",
+                    "$type": "fontSize"
+                },
+                "fontFamily": {
+                    "$value": "{reference.fontFamily.body}",
+                    "$type": "fontFamilies"
+                },
+                "fontWeight": {
+                    "$value": "{reference.fontWeight.Regular}",
+                    "$type": "fontWeights"
+                },
+                "lineHeight": {
+                    "$value": "{reference.fontLine140}",
+                    "$type": "lineHeight"
+                },
+                "letterSpacing": {
+                    "$value": "{reference.letterSpacing.none}",
+                    "$type": "letterSpacing"
+                }
+            },
+            "headline1Desktop": {
+                "color": {
+                    "$value": "{system.textHeadline}",
+                    "$type": "color"
+                },
+                "fontSize": {
+                    "$value": "{reference.font800}",
+                    "$type": "fontSize"
+                },
+                "fontFamily": {
+                    "$value": "{reference.fontFamily.headline}",
+                    "$type": "fontFamilies"
+                },
+                "fontWeight": {
+                    "$value": "{reference.fontWeight.SemiBold}",
+                    "$type": "fontWeights"
+                },
+                "lineHeight": {
+                    "$value": "{reference.fontLine100}",
+                    "$type": "lineHeight"
+                },
+                "letterSpacing": {
+                    "$value": "{reference.letterSpacing.none}",
+                    "$type": "letterSpacing"
+                }
+            }
+        }
+    }
+}
