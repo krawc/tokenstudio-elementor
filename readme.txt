@@ -10,6 +10,8 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Sync design tokens with Elementor global styles. Imports reference colors and system typography. Resolves references to literal values. Updates the active Elementor Kit.
 
+NOTE: This plugin is in Beta. Use it at your own responsibility in Production.
+
 == Description ==
 
 This plugin creates a simple interface for syncing design tokens into Elementor.
