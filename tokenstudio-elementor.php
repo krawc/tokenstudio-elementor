@@ -12,6 +12,7 @@
  * Text Domain: tokenstudio-elementor
  */
 
+
 // Add submenu under Elementor
 add_action('admin_menu', function () {
     add_submenu_page(
@@ -24,7 +25,7 @@ add_action('admin_menu', function () {
     );
 }, 99);
 
-// Admin page renderer
+// Admin page
 function render_tokenstudio_page() {
     if (isset($_POST['reference_json'], $_POST['system_json']) && check_admin_referer('save_tokenstudio')) {
         update_option('tokenstudio_reference_json', wp_unslash($_POST['reference_json']));
@@ -123,13 +124,14 @@ function render_tokenstudio_page() {
 
 // --- Helpers ---
 
-// Flatten reference tokens into dict: "reference.blue500" => "#hex"
+// Flatten tokens into dict: "reference.font200" => "17px"
 function build_reference_dict($array, $prefix = '') {
     $dict = [];
     foreach ($array as $k => $v) {
         $path = $prefix ? $prefix . '.' . $k : $k;
-        if (is_array($v) && isset($v['$type']) && isset($v['$value'])) {
-            $dict[$path] = $v['$value'];
+        if (is_array($v) && (isset($v['$value']) || isset($v['value']))) {
+            $val = $v['$value'] ?? $v['value'];
+            $dict[$path] = $val;
         } elseif (is_array($v)) {
             $dict = array_merge($dict, build_reference_dict($v, $path));
         }
@@ -137,48 +139,72 @@ function build_reference_dict($array, $prefix = '') {
     return $dict;
 }
 
-// Resolve "{reference.something}" → literal
-function resolve_value($raw, $refDict) {
-    if (is_string($raw) && preg_match('/^{(.+)}$/', $raw, $m)) {
-        return $refDict[$m[1]] ?? null;
+// Recursively resolve a token reference until literal
+function resolve_value($raw, $refDict, $sysDict, $seen = []) {
+    if ($raw === null) return null;
+    if (!is_string($raw)) return $raw;
+
+    if (preg_match('/^{(.+)}$/', $raw, $m)) {
+        $path = $m[1];
+        if (in_array($path, $seen, true)) return null;
+        $seen[] = $path;
+
+        if (isset($refDict[$path])) {
+            return resolve_value($refDict[$path], $refDict, $sysDict, $seen);
+        }
+        if (isset($sysDict[$path])) {
+            return resolve_value($sysDict[$path], $refDict, $sysDict, $seen);
+        }
+        return null;
     }
-    return $raw;
+    return $raw; // already literal
 }
 
 // Convert system.typography → Elementor presets
-function system_typography_to_elementor($systemTokens, $refDict) {
+function system_typography_to_elementor($systemTokens, $refDict, $sysDict) {
     if (!isset($systemTokens['typography'])) return [];
     $presets = [];
+
     foreach ($systemTokens['typography'] as $name => $rules) {
         $preset = [
             '_id' => substr(md5($name), 0, 7),
             'title' => ucfirst($name),
             'typography_typography' => 'custom'
         ];
+
         foreach ($rules as $prop => $def) {
-            $val = resolve_value($def['$value'] ?? null, $refDict);
-            if (!$val) continue;
+            $rawVal = $def['$value'] ?? $def['value'] ?? null;
+            $val = resolve_value($rawVal, $refDict, $sysDict);
+            if ($val === null) continue;
+
             switch ($prop) {
                 case 'fontSize':
-                    $preset['typography_font_size'] = ['unit' => 'px', 'size' => (float) filter_var($val, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION)];
+                    $preset['typography_font_size'] = [
+                        'unit' => 'px',
+                        'size' => (float) filter_var($val, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
+                        'sizes' => []
+                    ];
                     break;
-                case 'fontFamily': $preset['typography_font_family'] = $val; break;
-                case 'fontWeight': $preset['typography_font_weight'] = (int) $val; break;
+                case 'fontFamily':
+                    $preset['typography_font_family'] = $val; break;
+                case 'fontWeight':
+                    $preset['typography_font_weight'] = (int) $val; break;
                 case 'lineHeight':
                     if (str_contains($val, '%')) {
-                        $preset['typography_line_height'] = ['unit'=>'percent','size'=>(int)$val];
+                        $preset['typography_line_height'] = ['unit'=>'%','size'=>(int)$val,'sizes'=>[]];
                     } else {
-                        $preset['typography_line_height'] = ['unit'=>'px','size'=>(float)$val];
+                        $preset['typography_line_height'] = ['unit'=>'px','size'=>(float)$val,'sizes'=>[]];
                     }
                     break;
                 case 'letterSpacing':
                     if (str_contains($val, '%')) {
-                        $preset['typography_letter_spacing'] = ['unit'=>'percent','size'=>(int)$val];
+                        $preset['typography_letter_spacing'] = ['unit'=>'%','size'=>(int)$val,'sizes'=>[]];
                     } else {
-                        $preset['typography_letter_spacing'] = ['unit'=>'px','size'=>(float)$val];
+                        $preset['typography_letter_spacing'] = ['unit'=>'px','size'=>(float)$val,'sizes'=>[]];
                     }
                     break;
-                case 'color': $preset['color'] = $val; break;
+                case 'color':
+                    $preset['color'] = $val; break;
             }
         }
         $presets[] = $preset;
@@ -201,24 +227,26 @@ function sync_tokenstudio_to_elementor($refJson, $sysJson, $refKey = '', $sysKey
     if ($refKey && isset($refs[$refKey])) $refs = $refs[$refKey];
     if ($sysKey && isset($sys[$sysKey])) $sys = $sys[$sysKey];
 
-    $refDict = build_reference_dict($refs);
+    $refDict = build_reference_dict($refs, 'reference');
+    $sysDict = build_reference_dict($sys, 'system');
 
-    // Colors: only from reference tokens
+    // Colors: only from reference tokens with type=color
     $colors = [];
-    foreach ($refDict as $path => $val) {
-        if (str_contains($path, '.') && isset($refs)) {
-            // crude check: only keep type=color
-            $parts = explode('.', $path);
-            $last  = end($parts);
-            if (isset($refs[$last]['$type']) && $refs[$last]['$type'] === 'color') {
-                $colors[$last] = $val;
+    $walker = function($arr) use (&$walker, &$colors) {
+        foreach ($arr as $k => $v) {
+            if (is_array($v) && isset($v['$type']) && $v['$type'] === 'color' && (isset($v['$value']) || isset($v['value']))) {
+                $colors[$k] = $v['$value'] ?? $v['value'];
+            } elseif (is_array($v)) {
+                $walker($v);
             }
         }
-    }
+    };
+    $walker($refs);
 
-    // Typography: from system.typography resolved via $refDict
-    $typographyPresets = system_typography_to_elementor($sys ?? [], $refDict);
+    // Typography
+    $typographyPresets = system_typography_to_elementor($sys ?? [], $refDict, $sysDict);
 
+    // Load Kit
     $kit_id   = \Elementor\Plugin::$instance->kits_manager->get_active_id();
     $kit      = \Elementor\Plugin::$instance->documents->get($kit_id, false);
     $settings = $kit->get_settings();
@@ -242,7 +270,7 @@ function sync_tokenstudio_to_elementor($refJson, $sysJson, $refKey = '', $sysKey
         }
     }
 
-    // Merge typography
+    // Merge typography (overwrite if title matches)
     if (!isset($settings['custom_typography'])) $settings['custom_typography'] = [];
     $existingTypography = [];
     foreach ($settings['custom_typography'] as $i => $t) {
@@ -251,10 +279,7 @@ function sync_tokenstudio_to_elementor($refJson, $sysJson, $refKey = '', $sysKey
     foreach ($typographyPresets as $preset) {
         $title = strtolower($preset['title']);
         if (isset($existingTypography[$title])) {
-            $settings['custom_typography'][$existingTypography[$title]] = array_replace(
-                $settings['custom_typography'][$existingTypography[$title]],
-                $preset
-            );
+            $settings['custom_typography'][$existingTypography[$title]] = $preset;
         } else {
             $settings['custom_typography'][] = $preset;
         }
