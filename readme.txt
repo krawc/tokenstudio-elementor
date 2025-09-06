@@ -1,16 +1,14 @@
 === Token Studio → Elementor Sync ===
-Contributors: yourname
-Tags: elementor, design tokens, global styles, typography, colors, token studio, design system
+Contributors: krawc
+Tags: elementor, design tokens, design system, typography, token studio
 Requires at least: 6.0
-Tested up to: 6.6
+Tested up to: 6.8
 Requires PHP: 7.4
 Stable tag: 0.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Sync design tokens with Elementor global styles. Imports reference colors and system typography. Resolves references to literal values. Updates the active Elementor Kit.
-
-NOTE: This plugin is in Beta. Use it at your own responsibility in Production.
 
 == Description ==
 

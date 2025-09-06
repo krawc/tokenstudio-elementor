@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Token Studio → Elementor Sync
  * Plugin URI:  https://localhost96.net
- * Description: (Beta) Sync design tokens with Elementor global styles. Imports reference colors and system typography. Resolves references to literal values. Updates the active Elementor Kit.
+ * Description: [Beta] Sync design tokens with Elementor global styles. Imports reference colors and system typography. Resolves references to literal values. Updates the active Elementor Kit.
  * Version:     0.1.0
  * Author:      Konrad Krawczyk
  * Author URI:  https://localhost96.net
@@ -28,10 +28,10 @@ add_action('admin_menu', function () {
 // Admin page
 function render_tokenstudio_page() {
     if (isset($_POST['reference_json'], $_POST['system_json']) && check_admin_referer('save_tokenstudio')) {
-        update_option('tokenstudio_reference_json', wp_unslash($_POST['reference_json']));
-        update_option('tokenstudio_system_json', wp_unslash($_POST['system_json']));
-        update_option('tokenstudio_reference_key', sanitize_text_field($_POST['reference_key'] ?? ''));
-        update_option('tokenstudio_system_key', sanitize_text_field($_POST['system_key'] ?? ''));
+        update_option('tokenstudio_reference_json', sanitize_text_field(wp_unslash($_POST['reference_json'])));
+        update_option('tokenstudio_system_json', sanitize_text_field(wp_unslash($_POST['system_json'])));
+        update_option('tokenstudio_reference_key', sanitize_text_field(wp_unslash($_POST['reference_key'] ?? '')));
+        update_option('tokenstudio_system_key', sanitize_text_field(wp_unslash($_POST['system_key'] ?? '')));
 
         $refJson = get_option('tokenstudio_reference_json', '{}');
         $sysJson = get_option('tokenstudio_system_json', '{}');
