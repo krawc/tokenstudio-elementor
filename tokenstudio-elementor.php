@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Token Studio → Elementor Sync
  * Plugin URI:  https://localhost96.net
- * Description: Sync design tokens with Elementor global styles. Imports reference colors and system typography. Resolves references to literal values. Updates the active Elementor Kit.
+ * Description: (Beta) Sync design tokens with Elementor global styles. Imports reference colors and system typography. Resolves references to literal values. Updates the active Elementor Kit.
  * Version:     0.1.0
  * Author:      Konrad Krawczyk
  * Author URI:  https://localhost96.net
